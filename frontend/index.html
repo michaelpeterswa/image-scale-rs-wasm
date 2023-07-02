@@ -1,0 +1,43 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>rust-wasm-start</title>
+    <meta name="description" content="rust-wasm-start">
+    <meta name="author" content="michaelpeterswa">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+  </head>
+
+  <body class="font">
+    <section class="section">
+      <div class="container pb-4">
+        <h1 class="title has-text-primary is-2">
+          rust-wasm-start
+        </h1>
+        <br>
+        <p class="subtitle has-text-grey is-4" id="add">
+        </p>
+        <p class="subtitle has-text-grey-light is-6">
+          woo!
+        </p>
+      </div>
+      
+	  </section>
+  </body>
+  <script type="module">
+    import init, {add} from "./pkg/rust_wasm_start.js";
+    init()
+      .then(() => {
+        var output = document.getElementById('add');
+        output.textContent = "3 + 7 = " + add(3, 7);
+      });
+  </script>
+</html>
