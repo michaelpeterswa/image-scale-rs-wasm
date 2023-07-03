@@ -20,24 +20,91 @@
     <section class="section">
       <div class="container pb-4">
         <h1 class="title has-text-primary is-2">
-          rust-wasm-start
+          image-scale-rs-wasm
         </h1>
         <br>
-        <p class="subtitle has-text-grey is-4" id="add">
-        </p>
         <p class="subtitle has-text-grey-light is-6">
           woo!
         </p>
+        <input type="file" accept="image/*" onchange="scale_input_image(event.target.files[0])">
       </div>
+      <div id="image-pre-scale"></div>
+      <div id="image-post-scale"></div>
       
 	  </section>
   </body>
   <script type="module">
-    import init, {add} from "./pkg/rust_wasm_start.js";
-    init()
-      .then(() => {
-        var output = document.getElementById('add');
-        output.textContent = "3 + 7 = " + add(3, 7);
-      });
+    import init, {scale} from "./pkg/image_scale_rs_wasm.js";
+
+    async function run() {
+      await init();
+      console.log("image scale wasm initialized");
+    }
+
+    run();
+
+    function scale_input_image(i) {
+      console.log("scale input image")
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(i);
+      reader.onload = function() {
+        console.log("reader onload");
+
+        var objURL = URL.createObjectURL(i)
+        
+        var image = new Image();
+        console.log("image created");
+        image.src = objURL;
+        console.log("image src set");
+
+        var image_pre_scale = document.getElementById("image-pre-scale");
+        image_pre_scale.appendChild(image);
+
+        image.onerror = function(e) {
+          console.log("image onerror");
+          console.log(e);
+        };
+        image.onload = function() {
+          console.log("image onload");
+          let x = image.width;
+          let y = image.height;
+
+          console.log("original image loaded");
+          console.log(x, y);
+
+          let imagescale = 0.5;
+          let nx = Math.floor(x * imagescale);
+          let ny = Math.floor(y * imagescale);
+
+          console.log("scaled image proposed size");
+          console.log(nx, ny);
+
+          console.log("scaling image");
+          var uint8View = new Uint8Array(reader.result);
+
+          let scaled_img = scale(uint8View, nx, ny);
+          console.log("image scaled");
+
+          let objURL2 = URL.createObjectURL(
+            new Blob([scaled_img], { type: 'image/png' })
+          );
+
+          var new_image = new Image();
+          new_image.src = objURL2;
+
+          var image_post_scale = document.getElementById("image-post-scale");
+          image_post_scale.appendChild(new_image);
+
+          new_image.onload = function() {
+            console.log("scaled image loaded");
+            console.log(new_image.width, new_image.height);
+          };
+          
+        };
+      };
+    };
+
+    // expose function to window
+    window.scale_input_image = scale_input_image;
   </script>
 </html>

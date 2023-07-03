@@ -1,2 +1,2 @@
-# rust-wasm-start
-A starter repository for building WASM binaries from Rust
+# image-scale-rs-wasm
+a demonstration of scaling images using rust and webassembly

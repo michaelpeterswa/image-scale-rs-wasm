@@ -4,7 +4,7 @@ FROM rust:alpine as rust-setup
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN apk update && \ 
-    apk add --no-cache musl-dev=1.2.3-r0 curl=7.83.1-r2 && \
+    apk add --no-cache musl-dev=1.2.4-r0 curl=8.1.2-r0 && \
     curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | ash
 
 # -=-=-=-=-=-=- Compile Rust WASM Module -=-=-=-=-=-=-
